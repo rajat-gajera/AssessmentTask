@@ -2,25 +2,21 @@ package com.example.assessmenttask;
 
 import android.app.Dialog;
 import android.content.Context;
-
-
 import android.content.Intent;
-
-
 import android.net.Uri;
 import android.util.Log;
-
- import android.view.View;
- import android.widget.Button;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
+import com.github.andreilisun.swipedismissdialog.SwipeDismissDialog;
+ import com.squareup.picasso.Picasso;
 
 
 public class ResponseDialogBox {
-    private Dialog dialog;
-    private String title, imageURL;
+
+
 
     private ResponseDialogBox() {
     }
@@ -31,18 +27,21 @@ public class ResponseDialogBox {
         return instance;
     }
 
-    public void show(Context context, String title, String imageURL,String successURL )  {
-        this.title = title;
-        this.imageURL = imageURL;
-        dialog = new Dialog(context);
+    public void show(Context context, String title, String imageURL, String successURL) {
 
-        dialog.setContentView(R.layout.response_dialog_box);
+
+        View dialog = LayoutInflater.from(context).inflate(R.layout.response_dialog_box, null);
+        new SwipeDismissDialog.Builder(context)
+                .setView(dialog)
+                .build()
+                .show();
+
         ImageView imageView = dialog.findViewById(R.id.image);
-        Log.d("TAG", this.imageURL);
         Picasso.get().load(imageURL).into(imageView);
 
         TextView textView = dialog.findViewById(R.id.title);
         textView.setText(title);
+
         Button success = dialog.findViewById(R.id.success);
         success.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,13 +51,5 @@ public class ResponseDialogBox {
 
             }
         });
-
-
-        dialog.show();
-
-
     }
-
-
-
 }
